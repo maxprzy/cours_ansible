@@ -1,0 +1,12 @@
+---
+- name: samba
+  hosts: srv
+  become: yes
+  tasks:
+    - name: create samba user mathieu
+      shell:  (echo "{{ mathieu_pass }}"; echo "{{ mathieu_pass }}") | smbpasswd -a mathieu  -s
+    - name: create samba user florence
+      shell:  (echo "{{ florence_pass }}"; echo "{{ florence_pass }}") | smbpasswd -a florence  -s
+    - name: create samba user maxime
+      shell:  (echo "{{ maxime_pass }}"; echo "{{ maxime_pass }}") | smbpasswd -a maxime  -s
+

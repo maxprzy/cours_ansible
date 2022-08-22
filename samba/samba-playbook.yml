@@ -1,0 +1,27 @@
+---
+- name: samba
+  hosts: srv
+  become: yes
+  tasks:
+    - name: Install samba
+      ansible.builtin.apt:
+        name: samba
+        state: present
+    - name: Start service
+      service:
+        name: smbd
+        state: started
+        enabled: yes
+    - name: Update smb.conf
+      lineinfile:
+        dest: /etc/samba/smb.conf
+        backup: yes
+        line: "[share]\ninclude = /etc/samba/smb.conf.ansible"
+    - name: copy custom smb file
+      copy:
+        src: smb.conf.ansible
+        dest: /etc/samba/smb.conf.ansible
+    - name: reload samba
+      service:
+        name: smbd
+        state: restarted

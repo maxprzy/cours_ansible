@@ -1,0 +1,27 @@
+---
+- name: cisco
+  hosts: switchs
+  connection: network_cli
+  gather_facts: no
+  tasks:
+    - name: configure top level configuration
+      cisco.ios.ios_config:
+              lines: hostname sw1
+    - name: Create Vlans
+      cisco.ios.ios_vlans:
+            config:
+            - name: Vlan_10
+              vlan_id: 10
+              state: active
+              shutdown: disabled
+              remote_span: true
+            - name: Vlan_20
+              vlan_id: 20
+              mtu: 610
+              state: active
+              shutdown: enabled
+            - name: Vlan_30
+              vlan_id: 30
+              state: suspend
+              shutdown: enabled
+            state: merged

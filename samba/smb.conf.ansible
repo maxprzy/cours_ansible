@@ -1,0 +1,11 @@
+	comment = share folder
+	path = /home/partage
+	browseable = yes
+	read only = no
+	writeable = yes
+	valid users = @GG_coordo_toulouse @GG_form_res_t @GG_form_dev_t 
+	public = yes
+	printable = no
+	read list = @GG_coordo_toulouse @GG_form_res_t @GG_form_dev_t
+	write list = @GG_coordo_toulouse @GG_form_res_t @GG_form_dev_t 
+

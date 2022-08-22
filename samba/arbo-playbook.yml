@@ -1,0 +1,74 @@
+---
+- name: Playbook
+  hosts: srv
+  become: yes
+  tasks:
+    - name: Ensure group GG_coordo_toulouse exists, if not create it
+      ansible.builtin.group:
+        name: GG_coordo_toulouse
+        state: present
+    - name: Ensure group GG_coordo_paris exists, if not create it
+      group:
+        name: GG_coordo_paris
+        state: present
+    - name: Ensure group GG_form_res_t exists, if not create it
+      group:
+        name: GG_form_res_t
+        state: present
+    - name: Ensure group GG_form_dev_t exists, if not create it
+      group:
+        name: GG_form_dev_t
+        state: present
+
+
+    - name: Add user florence with appending to group GG_coordo_toulouse
+      ansible.builtin.user:
+        name: florence
+        shell: /bin/bash
+        password: "{{ florence_pass | password_hash('sha512') }}"
+        groups: GG_coordo_toulouse
+        append: yes
+    - name: Add user mathieu with appending to group GG_coordo_toulouse, GG_form_res_t
+      user:
+        name: mathieu
+        shell: /bin/bash
+        password: "{{ mathieu_pass | password_hash('sha512') }}"
+        groups: GG_coordo_toulouse,GG_form_res_t
+        append: yes
+    - name: Add user maxime with appending to group GG_form_res_t, GG_form_dev_t
+      user:
+        name: maxime
+        shell: /bin/bash
+        password: "{{ maxime_pass | password_hash('sha512') }}"
+        groups: GG_form_res_t, GG_form_dev_t
+        append: yes
+
+    - name: Creates directory share Coordo Toulouse
+      ansible.builtin.file:
+        path: /home/partage/coordo/toulouse
+        owner: florence
+        group: GG_coordo_toulouse
+        mode: 0750
+        state: directory
+    - name: Creates directory share Coordo Paris
+      file:
+        path: /home/partage/coordo/paris
+        owner: florence
+        group: GG_coordo_paris
+        mode: 0750
+        state: directory
+    - name: Creates directory share Formateurs Toulouse Reseau
+      file:
+        path: /home/partage/formateur/toulouse/reseau
+        owner: mathieu
+        group: GG_form_res_t
+        state: directory
+        mode: 0750
+    - name: Creates directory share Formateurs Toulouse Dev
+      file:
+        path: /home/partage/formateur/toulouse/dev
+        owner: maxime
+        group: GG_form_dev_t
+        mode: 0750
+        state: directory
+
